@@ -34,7 +34,7 @@ export default function Footer() {
               }}
             >
               <img
-                src="/VoucherUmroh/public/logo.png"
+                src="/VoucherUmroh/logo.png"
                 alt="Logo"
                 style={{ width: "40px", height: "40px", objectFit: "contain" }}
               />
