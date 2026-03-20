@@ -65,11 +65,26 @@ export default function AdminLoginPage() {
       >
         {/* Logo */}
         <div style={{ textAlign: "center", marginBottom: "40px" }}>
-          <img
-            src="/VoucherUmroh/logo.png"
-            alt="Logo"
-            style={{ width: "45px", height: "45px", objectFit: "contain" }}
-          />
+          <div
+            style={{
+              width: "80px",
+              height: "80px",
+              background: "linear-gradient(135deg,#c9a84c,#e8c96d)",
+              borderRadius: "16px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "0 auto 16px",
+              boxShadow: "0 8px 32px rgba(201,168,76,0.3)",
+              overflow: "hidden",
+            }}
+          >
+            <img
+              src="/VoucherUmroh/logo.png"
+              alt="Logo"
+              style={{ width: "64px", height: "64px", objectFit: "contain" }}
+            />
+          </div>
           <div
             style={{
               fontFamily: "'Playfair Display',serif",
@@ -79,7 +94,7 @@ export default function AdminLoginPage() {
             }}
           >
             Voucher Umroh
-          </div>
+          </div>{" "}
           <div
             style={{
               fontSize: "13px",
