@@ -262,62 +262,33 @@ function TrackingContent() {
         >
           <div
             style={{
+              background: "rgba(201,168,76,0.05)",
+              border: "1px solid rgba(201,168,76,0.12)",
+              borderRadius: "12px",
+              padding: "14px 18px",
+              marginBottom: "16px",
               display: "flex",
-              gap: "16px",
-              marginBottom: "14px",
-              flexWrap: "wrap",
+              alignItems: "flex-start",
+              gap: "12px",
             }}
           >
+            <span style={{ fontSize: "16px", flexShrink: 0 }}>📋</span>
             <div
               style={{
-                fontSize: "12px",
-                color: "rgba(249,243,227,0.35)",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
+                fontSize: "13px",
+                color: "rgba(249,243,227,0.5)",
+                lineHeight: 1.8,
               }}
             >
-              <span
-                style={{
-                  fontFamily: "'DM Mono',monospace",
-                  fontSize: "11px",
-                  padding: "2px 8px",
-                  background: "rgba(201,168,76,0.08)",
-                  border: "1px solid rgba(201,168,76,0.15)",
-                  borderRadius: "4px",
-                  color: "#c9a84c",
-                }}
-              >
-                ID.0001-I-A1B2
-              </span>
-              → Kode voucher spesifik
-            </div>
-            <div
-              style={{
-                fontSize: "12px",
-                color: "rgba(249,243,227,0.35)",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "'DM Mono',monospace",
-                  fontSize: "11px",
-                  padding: "2px 8px",
-                  background: "rgba(201,168,76,0.08)",
-                  border: "1px solid rgba(201,168,76,0.15)",
-                  borderRadius: "4px",
-                  color: "#c9a84c",
-                }}
-              >
-                ID.0001/I
-              </span>
-              → Semua voucher dalam order
+              Masukkan{" "}
+              <strong style={{ color: "#e8c96d" }}>Kode Voucher</strong> yang
+              tertera pada kartu digital Anda untuk melihat status voucher
+              tersebut, atau masukkan{" "}
+              <strong style={{ color: "#e8c96d" }}>Order ID</strong> yang
+              diterima setelah pembayaran untuk melihat seluruh voucher dalam
+              satu order.
             </div>
           </div>
-
           <div
             style={{
               display: "grid",
