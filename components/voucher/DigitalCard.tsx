@@ -205,21 +205,11 @@ export default function DigitalCard({ voucher }: DigitalCardProps) {
           zIndex: 2,
         }}
       >
-        <div
-          style={{
-            width: "38px",
-            height: "38px",
-            background: "linear-gradient(135deg,#c9a84c,#e8c96d)",
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "18px",
-            boxShadow: "0 0 16px rgba(201,168,76,0.4)",
-          }}
-        >
-          🕋
-        </div>
+        <img
+          src="/VoucherUmroh/logo.png"
+          alt="Logo"
+          style={{ width: "20px", height: "20px", objectFit: "contain" }}
+        />
         <div
           style={{
             fontSize: "9px",
