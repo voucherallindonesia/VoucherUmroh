@@ -36,6 +36,7 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           NEXT_PUBLIC_PAYMENT_URL: ${{ secrets.NEXT_PUBLIC_PAYMENT_URL }}
           NEXT_PUBLIC_WA_NUMBER: ${{ secrets.NEXT_PUBLIC_WA_NUMBER }}
+          NEXT_PUBLIC_ADMIN_PASSWORD: ${{ secrets.NEXT_PUBLIC_ADMIN_PASSWORD }}
         run: npm run build
 
       - name: Upload artifact
