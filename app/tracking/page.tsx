@@ -141,6 +141,7 @@ function TrackingContent() {
       const { default: html2canvas } = await import("html2canvas");
 
       // Tunggu semua gambar dalam card selesai load
+      // Tunggu semua gambar selesai load
       const images = ref.querySelectorAll("img");
       await Promise.all(
         Array.from(images).map((img) =>
@@ -152,6 +153,29 @@ function TrackingContent() {
               }),
         ),
       );
+
+      // Fix QR Code canvas width/height = 0
+      // Konversi semua canvas di dalam card menjadi <img> sebelum di-render
+      const canvases = ref.querySelectorAll("canvas");
+      canvases.forEach((canvas) => {
+        if (canvas.width === 0 || canvas.height === 0) {
+          canvas.width = 70;
+          canvas.height = 70;
+          return;
+        }
+        try {
+          const dataUrl = canvas.toDataURL("image/png");
+          const img = document.createElement("img");
+          img.src = dataUrl;
+          img.width = canvas.width;
+          img.height = canvas.height;
+          img.style.cssText = canvas.style.cssText;
+          canvas.parentNode?.replaceChild(img, canvas);
+        } catch {}
+      });
+
+      // Tunggu sebentar agar semua perubahan DOM ter-apply
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
       const canvas = await html2canvas(ref, {
         scale: 2,
