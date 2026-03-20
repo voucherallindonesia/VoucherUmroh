@@ -308,9 +308,9 @@ export default function AdminDashboardPage() {
       >
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <img
-            src="/VoucherUmroh/logo.png"
+            src="/VoucherUmroh/public/logo.png"
             alt="Logo"
-            style={{ width: "18px", height: "18px", objectFit: "contain" }}
+            style={{ width: "45px", height: "45px", objectFit: "contain" }}
           />
           <div>
             <div

@@ -34,10 +34,11 @@ export default function Footer() {
               }}
             >
               <img
-                src="/VoucherUmroh/logo.png"
+                src="/VoucherUmroh/public/logo.png"
                 alt="Logo"
-                style={{ width: "20px", height: "20px", objectFit: "contain" }}
+                style={{ width: "50px", height: "50px", objectFit: "contain" }}
               />
+
               <span
                 style={{
                   fontFamily: "'Playfair Display',serif",

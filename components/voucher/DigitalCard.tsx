@@ -206,10 +206,11 @@ export default function DigitalCard({ voucher }: DigitalCardProps) {
         }}
       >
         <img
-          src="/VoucherUmroh/logo.png"
+          src="/VoucherUmroh/public/logo.png"
           alt="Logo"
-          style={{ width: "22px", height: "22px", objectFit: "contain" }}
+          style={{ width: "70px", height: "70px", objectFit: "contain" }}
         />
+
         <div
           style={{
             fontSize: "9px",

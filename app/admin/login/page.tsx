@@ -66,9 +66,9 @@ export default function AdminLoginPage() {
         {/* Logo */}
         <div style={{ textAlign: "center", marginBottom: "40px" }}>
           <img
-            src="/VoucherUmroh/logo.png"
+            src="/VoucherUmroh/public/logo.png"
             alt="Logo"
-            style={{ width: "28px", height: "28px", objectFit: "contain" }}
+            style={{ width: "75px", height: "75px", objectFit: "contain" }}
           />
           <div
             style={{
