@@ -1,10 +1,14 @@
-import { supabase } from './supabase'
+import { createClient } from '@getClient()/getClient()-js'
 import type { Order, Voucher } from '@/types'
 
 // ── AUTH ─────────────────────────────────────────────────────
 // Password admin disimpan di .env.local
 // NEXT_PUBLIC_ADMIN_PASSWORD=passwordrahasiakamu
-
+function getClient() {
+  const url = process.env.NEXT_PUBLIC_getClient()_URL || ''
+  const key = process.env.NEXT_PUBLIC_getClient()_ANON_KEY || ''
+  return createClient(url, key)
+}
 export function checkAdminPassword(input: string): boolean {
   const pw = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'admin123'
   return input === pw
@@ -30,7 +34,7 @@ export function isAdminLoggedIn(): boolean {
 // ── DATA FETCHING ─────────────────────────────────────────────
 
 export async function getAllOrders(): Promise<Order[]> {
-  const { data, error } = await supabase
+  const { data, error } = await getClient()
     .from('orders')
     .select('*')
     .order('created_at', { ascending: false })
@@ -39,7 +43,7 @@ export async function getAllOrders(): Promise<Order[]> {
 }
 
 export async function getVouchersByOrderId(orderId: string): Promise<Voucher[]> {
-  const { data, error } = await supabase
+  const { data, error } = await getClient()
     .from('vouchers')
     .select('*')
     .eq('order_id', orderId)
@@ -49,7 +53,7 @@ export async function getVouchersByOrderId(orderId: string): Promise<Voucher[]> 
 }
 
 export async function getAllVouchers(): Promise<Voucher[]> {
-  const { data, error } = await supabase
+  const { data, error } = await getClient()
     .from('vouchers')
     .select('*')
     .order('created_at', { ascending: false })
@@ -64,7 +68,7 @@ export async function getAllVouchers(): Promise<Voucher[]> {
  */
 export async function activateOrder(orderId: string): Promise<{ success: boolean; error?: string }> {
   // Update status order
-  const { error: orderError } = await supabase
+  const { error: orderError } = await getClient()
     .from('orders')
     .update({ status: 'active' })
     .eq('order_id', orderId)
@@ -72,7 +76,7 @@ export async function activateOrder(orderId: string): Promise<{ success: boolean
   if (orderError) return { success: false, error: orderError.message }
 
   // Update semua voucher terkait
-  const { error: voucherError } = await supabase
+  const { error: voucherError } = await getClient()
     .from('vouchers')
     .update({ status: 'active' })
     .eq('order_id', orderId)
@@ -86,14 +90,14 @@ export async function activateOrder(orderId: string): Promise<{ success: boolean
  * Tolak order (rejected)
  */
 export async function rejectOrder(orderId: string): Promise<{ success: boolean; error?: string }> {
-  const { error: orderError } = await supabase
+  const { error: orderError } = await getClient()
     .from('orders')
     .update({ status: 'rejected' })
     .eq('order_id', orderId)
 
   if (orderError) return { success: false, error: orderError.message }
 
-  const { error: voucherError } = await supabase
+  const { error: voucherError } = await getClient()
     .from('vouchers')
     .update({ status: 'rejected' })
     .eq('order_id', orderId)
@@ -107,7 +111,7 @@ export async function rejectOrder(orderId: string): Promise<{ success: boolean; 
  * Tandai voucher sebagai sudah digunakan
  */
 export async function markVoucherUsed(kodeUnik: string): Promise<{ success: boolean; error?: string }> {
-  const { error } = await supabase
+  const { error } = await getClient()
     .from('vouchers')
     .update({ status: 'used' })
     .eq('kode_unik', kodeUnik)
