@@ -132,22 +132,51 @@ function TrackingContent() {
 
   async function handleDownload(v: Voucher) {
     const ref = cardRefs.current[v.kode_unik];
-    if (!ref) return;
+    if (!ref) {
+      showToast("Kartu belum siap. Tunggu sebentar lalu coba lagi.", "error");
+      return;
+    }
     setDlLoad(v.kode_unik);
     try {
       const { default: html2canvas } = await import("html2canvas");
+
+      // Tunggu semua gambar dalam card selesai load
+      const images = ref.querySelectorAll("img");
+      await Promise.all(
+        Array.from(images).map((img) =>
+          img.complete
+            ? Promise.resolve()
+            : new Promise((resolve) => {
+                img.onload = resolve;
+                img.onerror = resolve;
+              }),
+        ),
+      );
+
       const canvas = await html2canvas(ref, {
         scale: 2,
-        backgroundColor: null,
+        backgroundColor: "#031a0a",
         useCORS: true,
+        allowTaint: true,
         logging: false,
+        imageTimeout: 5000,
+        onclone: (clonedDoc) => {
+          // Set willReadFrequently pada semua canvas di clone
+          clonedDoc.querySelectorAll("canvas").forEach((c) => {
+            c.getContext("2d", { willReadFrequently: true });
+          });
+        },
       });
+
       const link = document.createElement("a");
       link.download = `VoucherUmroh-${v.kode_unik}.png`;
-      link.href = canvas.toDataURL("image/png");
+      link.href = canvas.toDataURL("image/png", 1.0);
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
       showToast("✓ Kartu berhasil diunduh!", "success");
-    } catch {
+    } catch (err) {
+      console.error("Download error:", err);
       showToast("Gagal mengunduh. Coba lagi.", "error");
     } finally {
       setDlLoad(null);
