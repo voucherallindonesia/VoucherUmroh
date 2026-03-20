@@ -310,7 +310,7 @@ export default function AdminDashboardPage() {
           <img
             src="/VoucherUmroh/logo.png"
             alt="Logo"
-            style={{ width: "20px", height: "20px", objectFit: "contain" }}
+            style={{ width: "18px", height: "18px", objectFit: "contain" }}
           />
           <div>
             <div
