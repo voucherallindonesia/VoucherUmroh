@@ -15,45 +15,8 @@ import type { Voucher, Order } from "@/types";
 type ToastState = { message: string; type: "success" | "error" | "info" };
 type ResultMode = "single" | "multi" | "pending" | "used" | "notfound" | null;
 
-const DEMO: Record<string, Voucher> = {
-  "ID.0001-I-A1B2": {
-    id: "1",
-    kode_unik: "ID.0001-I-A1B2",
-    order_id: "ID.0001/I",
-    nama_jemaah: "Siti Rahmadhani",
-    kota_domisili: "Makassar",
-    travel_tujuan: "Al-Furqon Travel",
-    rencana_penggunaan: "2026-08-15",
-    status: "active",
-    created_at: "2026-03-01",
-  },
-  "ID.0001-I-PEND": {
-    id: "2",
-    kode_unik: "ID.0001-I-PEND",
-    order_id: "ID.0001/I",
-    nama_jemaah: "Ahmad Fauzi",
-    kota_domisili: "Surabaya",
-    travel_tujuan: "Berkah Umroh",
-    rencana_penggunaan: "2026-10-20",
-    status: "pending",
-    created_at: "2026-03-10",
-  },
-  "ID.0002-II-USED": {
-    id: "3",
-    kode_unik: "ID.0002-II-USED",
-    order_id: "ID.0002/II",
-    nama_jemaah: "Budi Santoso",
-    kota_domisili: "Bandung",
-    travel_tujuan: "Mina Tour",
-    rencana_penggunaan: "2025-12-05",
-    status: "used",
-    created_at: "2025-11-01",
-  },
-};
-
 const WA_URL = `https://wa.me/${process.env.NEXT_PUBLIC_WA_NUMBER || "6285167060863"}`;
 
-// ── Wrapper agar useSearchParams aman di SSG ─────────────────
 export default function TrackingPage() {
   return (
     <Suspense
@@ -88,21 +51,19 @@ function TrackingContent() {
     const codeParam = searchParams.get("code");
     if (codeParam) {
       setCode(codeParam.toUpperCase());
-      // Trigger search setelah state ter-set
       setTimeout(() => doSearch(codeParam.toUpperCase()), 200);
     }
   }, []);
 
   // ── Auto detect format ────────────────────────────────────────
-  function detectFormat(input: string): "order" | "voucher" | "unknown" {
+  function detectFormat(input: string): "order" | "voucher" {
     const v = input.trim().toUpperCase();
-    // Order ID: dimulai ID. dan mengandung / atau format ID.XXXX/XX
-    if (v.startsWith("ID.") && (v.includes("/") || v.match(/ID\.\d+$/)))
-      return "order";
-    // Kode voucher: dimulai ID. dan mengandung strip terakhir (suffix 4 char)
-    if (v.startsWith("ID.") && v.split("-").length >= 3) return "voucher";
-    if (v.startsWith("ID.")) return "voucher";
-    return "unknown";
+    const parts = v.split("-");
+    // Kode voucher: ID.XXXX-XX-XXXX (3 bagian setelah split strip)
+    if (v.startsWith("ID.") && parts.length >= 3) return "voucher";
+    // Order ID: ID.XXXX/XX (mengandung slash)
+    if (v.startsWith("ID.") && v.includes("/")) return "order";
+    return "voucher";
   }
 
   async function doSearch(searchCode?: string) {
@@ -115,23 +76,22 @@ function TrackingContent() {
     try {
       const fmt = detectFormat(input);
 
-      // Coba cari by Kode Voucher dulu (lebih spesifik)
-      if (fmt === "voucher" || fmt === "unknown") {
-        let v = await getVoucherByKode(input);
-        if (!v) v = DEMO[input] || null;
+      // Cari by Kode Voucher dulu
+      if (fmt === "voucher") {
+        const v = await getVoucherByKode(input);
         if (v) {
           setVoucher(v);
-          const msgs = {
+          const msgs: Record<string, string> = {
             active: "✓ Voucher aktif ditemukan!",
             pending: "⏳ Voucher menunggu konfirmasi.",
             used: "Voucher ini sudah pernah digunakan.",
             rejected: "Voucher ditolak.",
           };
-          const types = {
-            active: "success" as const,
-            pending: "info" as const,
-            used: "info" as const,
-            rejected: "error" as const,
+          const types: Record<string, ToastState["type"]> = {
+            active: "success",
+            pending: "info",
+            used: "info",
+            rejected: "error",
           };
           setMode(
             v.status === "active"
@@ -146,8 +106,8 @@ function TrackingContent() {
         }
       }
 
-      // Fallback: cari by Order ID
-      if (fmt === "order" || fmt === "unknown") {
+      // Cari by Order ID
+      if (fmt === "order") {
         const orderData = await getOrderById(input);
         if (orderData) {
           const vs = await getVouchersByOrderId(input);
@@ -163,15 +123,8 @@ function TrackingContent() {
       setMode("notfound");
       showToast("Kode tidak ditemukan. Periksa kembali.", "error");
     } catch {
-      const v = DEMO[input];
-      if (v) {
-        setVoucher(v);
-        setMode("single");
-        showToast("✓ Voucher ditemukan!", "success");
-      } else {
-        setMode("notfound");
-        showToast("Kode tidak ditemukan.", "error");
-      }
+      setMode("notfound");
+      showToast("Gagal terhubung. Periksa koneksi internet.", "error");
     } finally {
       setLoading(false);
     }
@@ -208,13 +161,7 @@ function TrackingContent() {
     setVouchers([]);
     setOrder(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
-    // Bersihkan URL param
     window.history.replaceState({}, "", window.location.pathname);
-  }
-
-  function tryCode(c: string) {
-    setCode(c);
-    setTimeout(() => doSearch(c), 100);
   }
 
   const actionRow = (
@@ -308,7 +255,7 @@ function TrackingContent() {
           </p>
         </div>
 
-        {/* SEARCH */}
+        {/* SEARCH BOX */}
         <div
           className="glass"
           style={{ padding: "36px 40px", marginBottom: "32px" }}
@@ -406,10 +353,9 @@ function TrackingContent() {
             </button>
           </div>
 
-          {/* QR scan hint */}
           <div
             style={{
-              marginTop: "14px",
+              marginTop: "12px",
               display: "flex",
               alignItems: "center",
               gap: "8px",
@@ -463,7 +409,8 @@ function TrackingContent() {
               >
                 {code}
               </strong>{" "}
-              tidak ditemukan. Pastikan kode diketik dengan benar.
+              tidak ditemukan dalam sistem kami. Pastikan kode diketik dengan
+              benar.
             </p>
             <div
               style={{
@@ -551,7 +498,7 @@ function TrackingContent() {
               <strong className="mono" style={{ color: "#e8c96d" }}>
                 {voucher.kode_unik}
               </strong>{" "}
-              sedang diverifikasi.
+              sedang diverifikasi oleh admin.
             </p>
             <p
               style={{
@@ -589,7 +536,7 @@ function TrackingContent() {
                   textDecoration: "none",
                 }}
               >
-                💬 Tanya Status
+                💬 Tanya Status ke Admin
               </a>
               <button onClick={handleClear} className="btn-outline">
                 Cek Lain
@@ -635,7 +582,8 @@ function TrackingContent() {
               <strong style={{ color: "var(--cream)" }}>
                 {voucher.nama_jemaah || "—"}
               </strong>{" "}
-              telah berhasil digunakan. Terima kasih 🕋
+              telah berhasil digunakan. Terima kasih sudah mempercayai Voucher
+              Umroh 🕋
             </p>
             <div
               style={{
@@ -652,7 +600,7 @@ function TrackingContent() {
                 className="btn-outline"
                 style={{ textDecoration: "none" }}
               >
-                🛒 Beli Lagi
+                🛒 Beli Voucher Lagi
               </a>
               <button onClick={handleClear} className="btn-outline">
                 Cek Lain
@@ -756,7 +704,12 @@ function TrackingContent() {
               }}
             >
               {[
-                { label: "ORDER ID", value: voucher.order_id, mono: true },
+                {
+                  label: "ORDER ID",
+                  value: voucher.order_id,
+                  mono: true,
+                  green: false,
+                },
                 {
                   label: "TERDAFTAR",
                   value: new Date(voucher.created_at).toLocaleDateString(
@@ -764,6 +717,7 @@ function TrackingContent() {
                     { day: "numeric", month: "long", year: "numeric" },
                   ),
                   mono: false,
+                  green: false,
                 },
                 { label: "STATUS", value: "✓ Aktif", mono: false, green: true },
               ].map((s) => (
@@ -791,7 +745,7 @@ function TrackingContent() {
                     style={{
                       fontSize: "13px",
                       fontWeight: 600,
-                      color: (s as any).green
+                      color: s.green
                         ? "#22c55e"
                         : s.mono
                           ? "#e8c96d"
@@ -879,16 +833,28 @@ function TrackingContent() {
               </div>
               <div style={{ display: "flex", gap: "28px", flexWrap: "wrap" }}>
                 {[
-                  { label: "Order ID", value: order.order_id, mono: true },
-                  { label: "Pembeli", value: order.nama_pembeli, mono: false },
+                  {
+                    label: "Order ID",
+                    value: order.order_id,
+                    mono: true,
+                    green: false,
+                  },
+                  {
+                    label: "Pembeli",
+                    value: order.nama_pembeli,
+                    mono: false,
+                    green: false,
+                  },
                   {
                     label: "Total Voucher",
                     value: `${order.jumlah_voucher} jemaah`,
                     mono: false,
+                    green: false,
                   },
                   {
                     label: "Status",
                     value: order.status === "active" ? "✓ Aktif" : "⏳ Pending",
+                    mono: false,
                     green: order.status === "active",
                   },
                 ].map((f) => (
@@ -903,13 +869,13 @@ function TrackingContent() {
                       {f.label}
                     </div>
                     <div
-                      className={(f as any).mono ? "mono" : ""}
+                      className={f.mono ? "mono" : ""}
                       style={{
                         fontSize: "14px",
                         fontWeight: 600,
-                        color: (f as any).green
+                        color: f.green
                           ? "#22c55e"
-                          : (f as any).mono
+                          : f.mono
                             ? "#e8c96d"
                             : "var(--cream)",
                       }}
@@ -944,7 +910,8 @@ function TrackingContent() {
                 }}
               >
                 Untuk mengisi atau mengubah data jemaah, kunjungi halaman{" "}
-                <strong style={{ color: "#e8c96d" }}>Registrasi</strong>.
+                <strong style={{ color: "#e8c96d" }}>Registrasi</strong> dan
+                masukkan Order ID yang sama.
               </div>
               <Link
                 href="/register"
@@ -1103,6 +1070,7 @@ function MultiVoucherList({
                 {sLabel(v.status)}
               </span>
             </div>
+
             <div
               style={{
                 fontSize: "13px",
@@ -1120,6 +1088,7 @@ function MultiVoucherList({
                 </span>
               )}
             </div>
+
             <div
               style={{
                 display: "flex",
@@ -1186,6 +1155,19 @@ function MultiVoucherList({
                   <DigitalCard voucher={v} />
                 </div>
               </div>
+            </div>
+          )}
+
+          {expanded === v.kode_unik && v.status === "pending" && (
+            <div
+              style={{
+                padding: "16px 20px",
+                background: "rgba(0,0,0,0.2)",
+                fontSize: "14px",
+                color: "rgba(249,243,227,0.4)",
+              }}
+            >
+              ⏳ Menunggu konfirmasi admin. Estimasi 1×24 jam di hari kerja.
             </div>
           )}
         </div>
