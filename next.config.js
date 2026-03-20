@@ -2,10 +2,11 @@
 const nextConfig = {
   output: "export",
   trailingSlash: true,
+  basePath: "/VoucherUmroh",
+  assetPrefix: "/VoucherUmroh",
   images: {
     unoptimized: true,
   },
-  // Abaikan error saat build SSG
   typescript: {
     ignoreBuildErrors: true,
   },
