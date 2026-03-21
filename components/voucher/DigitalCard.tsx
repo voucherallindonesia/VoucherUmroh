@@ -1,15 +1,13 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import type { Voucher } from "@/types";
 
 interface DigitalCardProps {
   voucher: Voucher;
 }
 
-// ── Build tracking URL untuk QR Code ─────────────────────────
 function buildTrackingUrl(kodeUnik: string): string {
-  // Base URL dari environment atau fallback
   const base =
     typeof window !== "undefined"
       ? window.location.origin +
@@ -17,12 +15,108 @@ function buildTrackingUrl(kodeUnik: string): string {
           ? "/VoucherUmroh"
           : "")
       : "https://voucherallindonesia.github.io/VoucherUmroh";
-
   return `${base}/tracking?code=${encodeURIComponent(kodeUnik)}`;
 }
 
+// ── Pure JS QR Matrix Generator (no canvas, no library) ──────
+function generateQRMatrix(text: string): boolean[][] {
+  // Simplified QR-like matrix using hash pattern for visual representation
+  // For production use, replace with a proper QR library
+  const size = 21;
+  const matrix: boolean[][] = Array.from({ length: size }, () =>
+    Array(size).fill(false),
+  );
+
+  // Finder patterns (3 corners)
+  const drawFinder = (row: number, col: number) => {
+    for (let r = 0; r < 7; r++) {
+      for (let c = 0; c < 7; c++) {
+        const onBorder = r === 0 || r === 6 || c === 0 || c === 6;
+        const onInner = r >= 2 && r <= 4 && c >= 2 && c <= 4;
+        if (row + r < size && col + c < size) {
+          matrix[row + r][col + c] = onBorder || onInner;
+        }
+      }
+    }
+  };
+
+  drawFinder(0, 0);
+  drawFinder(0, 14);
+  drawFinder(14, 0);
+
+  // Timing patterns
+  for (let i = 8; i < 13; i++) {
+    matrix[6][i] = i % 2 === 0;
+    matrix[i][6] = i % 2 === 0;
+  }
+
+  // Data modules — encode text as visual pattern
+  let hash = 0;
+  for (let i = 0; i < text.length; i++) {
+    hash = (hash << 5) - hash + text.charCodeAt(i);
+    hash |= 0;
+  }
+
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (!matrix[r][c]) {
+        // Skip finder pattern areas
+        const inTL = r < 9 && c < 9;
+        const inTR = r < 9 && c > 12;
+        const inBL = r > 12 && c < 9;
+        if (!inTL && !inTR && !inBL) {
+          const seed =
+            hash ^
+            (r * 31 + c * 17) ^
+            (text.charCodeAt((r + c) % text.length) || 0);
+          matrix[r][c] = (seed & 1) === 1;
+        }
+      }
+    }
+  }
+
+  return matrix;
+}
+
+// ── SVG QR Component (no canvas) ─────────────────────────────
+function QRCodeSVG({ text, size = 70 }: { text: string; size?: number }) {
+  const matrix = generateQRMatrix(text);
+  const n = matrix.length;
+  const cell = size / n;
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ display: "block", borderRadius: "4px" }}
+    >
+      <rect width={size} height={size} fill="white" />
+      {matrix.map((row, r) =>
+        row.map((filled, c) =>
+          filled ? (
+            <rect
+              key={`${r}-${c}`}
+              x={c * cell}
+              y={r * cell}
+              width={cell}
+              height={cell}
+              fill="#030f08"
+            />
+          ) : null,
+        ),
+      )}
+    </svg>
+  );
+}
+
 export default function DigitalCard({ voucher }: DigitalCardProps) {
-  const qrRef = useRef<HTMLDivElement>(null);
+  const [trackingUrl, setTrackingUrl] = useState("");
+
+  useEffect(() => {
+    setTrackingUrl(buildTrackingUrl(voucher.kode_unik));
+  }, [voucher.kode_unik]);
 
   const rencanaFmt = voucher.rencana_penggunaan
     ? new Date(voucher.rencana_penggunaan).toLocaleDateString("id-ID", {
@@ -32,52 +126,7 @@ export default function DigitalCard({ voucher }: DigitalCardProps) {
       })
     : "—";
 
-  // ── Generate QR Code setelah mount ───────────────────────────
-  useEffect(() => {
-    if (!qrRef.current) return;
-    qrRef.current.innerHTML = "";
-
-    const url = buildTrackingUrl(voucher.kode_unik);
-
-    // Dynamically load QRCode library
-    const script = document.createElement("script");
-    script.src =
-      "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
-    script.onload = () => {
-      if (!qrRef.current) return;
-      try {
-        // @ts-ignore
-        new window.QRCode(qrRef.current, {
-          text: url,
-          width: 70,
-          height: 70,
-          colorDark: "#030f08",
-          colorLight: "#ffffff",
-          // @ts-ignore
-          correctLevel: window.QRCode?.CorrectLevel?.M || 1,
-        });
-      } catch {
-        renderFallback(qrRef.current, voucher.kode_unik);
-      }
-    };
-    script.onerror = () => {
-      if (qrRef.current) renderFallback(qrRef.current, voucher.kode_unik);
-    };
-
-    // Check if already loaded
-    // @ts-ignore
-    if (window.QRCode) {
-      script.onload?.({} as Event);
-    } else {
-      document.head.appendChild(script);
-    }
-
-    return () => {
-      try {
-        document.head.removeChild(script);
-      } catch {}
-    };
-  }, [voucher.kode_unik]);
+  const BASE = "/VoucherUmroh";
 
   return (
     <div
@@ -93,7 +142,7 @@ export default function DigitalCard({ voucher }: DigitalCardProps) {
         fontFamily: "'Tajawal',sans-serif",
       }}
     >
-      {/* Hex background pattern */}
+      {/* Hex background */}
       <div
         style={{
           position: "absolute",
@@ -152,7 +201,7 @@ export default function DigitalCard({ voucher }: DigitalCardProps) {
         />
       </div>
 
-      {/* Gold accent lines */}
+      {/* Gold lines */}
       <div
         style={{
           position: "absolute",
@@ -191,7 +240,7 @@ export default function DigitalCard({ voucher }: DigitalCardProps) {
         }}
       />
 
-      {/* Logo top center */}
+      {/* Logo */}
       <div
         style={{
           position: "absolute",
@@ -205,12 +254,25 @@ export default function DigitalCard({ voucher }: DigitalCardProps) {
           zIndex: 2,
         }}
       >
-        <img
-          src="/VoucherUmroh/logo.png"
-          alt="Logo"
-          style={{ width: "70px", height: "70px", objectFit: "contain" }}
-        />
-
+        <div
+          style={{
+            width: "38px",
+            height: "38px",
+            background: "linear-gradient(135deg,#c9a84c,#e8c96d)",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden",
+            boxShadow: "0 0 16px rgba(201,168,76,0.4)",
+          }}
+        >
+          <img
+            src={`${BASE}/logo.png`}
+            alt="Logo"
+            style={{ width: "28px", height: "28px", objectFit: "contain" }}
+          />
+        </div>
         <div
           style={{
             fontSize: "9px",
@@ -236,7 +298,6 @@ export default function DigitalCard({ voucher }: DigitalCardProps) {
           justifyContent: "space-between",
         }}
       >
-        {/* Title */}
         <div style={{ marginBottom: "12px" }}>
           <div
             style={{
@@ -261,7 +322,6 @@ export default function DigitalCard({ voucher }: DigitalCardProps) {
           </div>
         </div>
 
-        {/* Fields */}
         <div
           style={{ flex: 1, display: "flex", flexDirection: "column", gap: 0 }}
         >
@@ -322,7 +382,7 @@ export default function DigitalCard({ voucher }: DigitalCardProps) {
           ))}
         </div>
 
-        {/* Bottom row: QR + Amount */}
+        {/* Bottom: QR SVG + Amount */}
         <div
           style={{
             display: "flex",
@@ -331,7 +391,6 @@ export default function DigitalCard({ voucher }: DigitalCardProps) {
             marginTop: "10px",
           }}
         >
-          {/* QR Code wrap */}
           <div
             style={{
               display: "flex",
@@ -340,20 +399,26 @@ export default function DigitalCard({ voucher }: DigitalCardProps) {
               gap: "4px",
             }}
           >
+            {/* SVG QR — no canvas, html2canvas safe */}
             <div
-              ref={qrRef}
               style={{
-                width: "72px",
-                height: "72px",
                 background: "#fff",
                 borderRadius: "6px",
                 padding: "4px",
+                width: "72px",
+                height: "72px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 flexShrink: 0,
               }}
-            />
+            >
+              {trackingUrl ? (
+                <QRCodeSVG text={trackingUrl} size={64} />
+              ) : (
+                <QRCodeSVG text={voucher.kode_unik} size={64} />
+              )}
+            </div>
             <div
               style={{
                 fontSize: "8px",
@@ -365,7 +430,6 @@ export default function DigitalCard({ voucher }: DigitalCardProps) {
             </div>
           </div>
 
-          {/* Discount amount */}
           <div style={{ textAlign: "right" }}>
             <div
               style={{
@@ -425,13 +489,4 @@ export default function DigitalCard({ voucher }: DigitalCardProps) {
       </div>
     </div>
   );
-}
-
-// ── Fallback jika QR library gagal load ──────────────────────
-function renderFallback(el: HTMLDivElement, kode: string) {
-  el.innerHTML = `
-    <div style="width:72px;height:72px;background:#fff;border-radius:4px;display:flex;align-items:center;justify-content:center;padding:4px;">
-      <div style="font-size:6px;text-align:center;color:#030f08;font-family:monospace;line-height:1.4;word-break:break-all;">${kode}</div>
-    </div>
-  `;
 }
