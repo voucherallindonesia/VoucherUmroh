@@ -4,6 +4,7 @@ Website penjualan voucher diskon umroh berbasis Next.js 14 + Supabase.
 https://voucherallindonesia.github.io/VoucherUmroh/
 
 ## Tech Stack
+
 - **Next.js 14** (SSG export)
 - **TypeScript**
 - **Tailwind CSS**
@@ -11,6 +12,7 @@ https://voucherallindonesia.github.io/VoucherUmroh/
 - **GitHub Pages** (hosting)
 
 ## Halaman
+
 - `/` — Landing page marketing
 - `/register` — Registrasi data jemaah
 - `/tracking` — Tracking & download digital card
@@ -18,6 +20,7 @@ https://voucherallindonesia.github.io/VoucherUmroh/
 ## Setup
 
 ### 1. Clone & Install
+
 ```bash
 git clone https://github.com/username/voucher-umroh.git
 cd voucher-umroh
@@ -25,13 +28,16 @@ npm install
 ```
 
 ### 2. Environment Variables
+
 ```bash
 cp .env.example .env.local
 # Isi dengan kredensial Supabase kamu
 ```
 
 ### 3. Supabase Setup
+
 Jalankan SQL ini di Supabase SQL Editor:
+
 ```sql
 -- Tabel orders
 create table orders (
@@ -69,24 +75,30 @@ create policy "allow_select_vouchers" on vouchers for select using (true);
 ```
 
 ### 4. GitHub Secrets
+
 Tambahkan secrets di Settings → Secrets → Actions:
+
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `NEXT_PUBLIC_PAYMENT_URL`
 - `NEXT_PUBLIC_WA_NUMBER`
 
 ### 5. Enable GitHub Pages
+
 Settings → Pages → Source: **GitHub Actions**
 
 ### 6. Deploy
+
 ```bash
 git add .
 git commit -m "initial commit"
 git push origin main
 ```
+
 GitHub Actions akan otomatis build dan deploy!
 
 ## Development
+
 ```bash
 npm run dev   # http://localhost:3000
 npm run build # Build untuk production
