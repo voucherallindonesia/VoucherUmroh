@@ -1,7 +1,6 @@
+// VoucherUmroh/app/page.tsx
 "use client";
-
 import { useState } from "react";
-import Link from "next/link";
 
 const WA_URL = `https://wa.me/${process.env.NEXT_PUBLIC_WA_NUMBER || "6285167060863"}`;
 const BUY_URL = process.env.NEXT_PUBLIC_PAYMENT_URL || "https://link.id";
@@ -22,6 +21,81 @@ const BENEFITS = [
     title: "Tidak Ada Batas Waktu",
     desc: "Beli sekarang, simpan kapanpun. Voucher ini tidak akan pernah kedaluwarsa.",
   },
+  {
+    icon: "🤝",
+    title: "Bebas Dialihkan Tanpa Syarat",
+    desc: "Voucher yang dibeli bukan hanya bisa untuk diri sendiri, tapi juga untuk orang lain dan dapat dipindah tangankan.",
+  },
+  {
+    icon: "🔍",
+    title: "Transparan Sejak Awal",
+    desc: "Kami menyampaikan dengan jelas bahwa voucher ini bukan paket umroh, bukan tabungan, dan tidak menjanjikan keberangkatan. Tidak ada informasi yang disembunyikan.",
+  },
+  {
+    icon: "⚙️",
+    title: "Sistem Sederhana & Mudah Dipahami",
+    desc: "Tidak ada skema rumit. Hanya 4 langkah: beli, simpan, klaim, gunakan.",
+  },
+  {
+    icon: "💚",
+    title: "Dibuat untuk Menjaga Niat, Bukan Menjual Janji",
+    desc: "Kami tidak menjual mimpi instan. Kami membantu Anda menjaga niat umroh dengan cara yang lebih realistis.",
+  },
+];
+
+const PROBLEMS = [
+  {
+    num: "01",
+    title: "Belum Siap Biaya Sekarang",
+    masalah: "Banyak orang ingin umroh, tapi belum punya dana penuh saat ini.",
+    solusi:
+      "Voucher membantu Anda memiliki nilai potongan lebih dulu, tanpa harus langsung membayar paket umroh.",
+  },
+  {
+    num: "02",
+    title: "Takut Salah Pilih Travel",
+    masalah:
+      "Banyak kasus travel bermasalah membuat orang ragu untuk mengambil keputusan.",
+    solusi:
+      "Anda tidak perlu buru-buru memilih travel. Voucher bisa digunakan saat Anda sudah yakin dan siap.",
+  },
+  {
+    num: "03",
+    title: "Tidak Siap Waktu",
+    masalah:
+      "Pekerjaan, keluarga, dan kondisi hidup membuat sulit menentukan waktu berangkat.",
+    solusi:
+      "Voucher tidak memiliki batas waktu. Anda bisa menggunakannya kapan saja saat sudah siap.",
+  },
+  {
+    num: "04",
+    title: "Takut Komitmen Besar Sekaligus",
+    masalah:
+      "Langsung bayar puluhan juta terasa berat dan berisiko bagi sebagian orang.",
+    solusi:
+      "Voucher memungkinkan Anda mulai dari langkah kecil, tanpa tekanan untuk langsung mengambil paket.",
+  },
+  {
+    num: "05",
+    title: "Niat Sering Tertunda",
+    masalah: "Niat umroh sering kalah oleh prioritas lain.",
+    solusi: "Voucher menjadi pengingat & pegangan, agar niat tetap terjaga.",
+  },
+  {
+    num: "06",
+    title: "Bingung Mulai dari Mana",
+    masalah: "Banyak orang tidak tahu harus mulai dari mana untuk umroh.",
+    solusi:
+      "Voucher bisa menjadi langkah awal sederhana, sebelum masuk ke proses yang lebih besar.",
+  },
+  {
+    num: "07",
+    title: "Takut Sistem yang Tidak Transparan",
+    masalah:
+      "Banyak orang khawatir dengan sistem yang tidak jelas atau terlalu rumit.",
+    solusi:
+      "Sistem voucher dibuat sederhana: beli → simpan → klaim → potong biaya.",
+  },
 ];
 
 const STEPS = [
@@ -29,7 +103,7 @@ const STEPS = [
     n: "1",
     icon: "🛒",
     title: "Beli Voucher",
-    desc: "Lakukan pembayaran Rp 99.000 melalui link.id dengan aman.",
+    desc: "Lakukan pembayaran Rp 60.000 melalui link.id dengan aman.",
   },
   {
     n: "2",
@@ -45,15 +119,9 @@ const STEPS = [
   },
   {
     n: "4",
-    icon: "✅",
-    title: "Konfirmasi Admin",
-    desc: "Tim kami memverifikasi pembayaran dan mengaktifkan voucher.",
-  },
-  {
-    n: "5",
     icon: "🎴",
     title: "Voucher Aktif!",
-    desc: "Kartu digital vouchermu siap — download kapanpun via tracking.",
+    desc: "Tim kami memverifikasi dan kartu digital vouchermu siap — download kapanpun via tracking.",
   },
 ];
 
@@ -103,13 +171,24 @@ const FAQS = [
     q: "Apakah data jemaah bisa diubah setelah diisi?",
     a: "Perubahan data hanya oleh admin. Hubungi tim kami melalui WhatsApp dan kami bantu dengan senang hati.",
   },
+  {
+    q: "Bisakah voucher ini diberikan ke orang lain?",
+    a: "Bisa! Voucher bebas dialihkan tanpa syarat. Bisa untuk keluarga, teman, atau siapa saja yang ingin umroh.",
+  },
+];
+
+const PRICE_FEATURES = [
+  "Berlaku disemua travel",
+  "Waktu redeem fleksibel",
+  "Tidak ada batas waktu",
+  "Bebas dialihkan tanpa syarat",
+  "Kartu voucher digital eksklusif",
+  "Bebas untuk beberapa jamaah dalam satu pembelian",
+  "Support via WhatsApp langsung dari tim kami",
 ];
 
 export default function HomePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-
-  const G = (s: TemplateStringsArray, ...v: unknown[]) =>
-    s.reduce((a, b, i) => a + (v[i - 1] ?? "") + b);
 
   return (
     <>
@@ -193,6 +272,8 @@ export default function HomePage() {
               />
               Voucher Resmi Umroh Indonesia
             </div>
+
+            {/* ── UPDATED HEADLINE ── */}
             <h1
               className="fade-up d2 serif"
               style={{
@@ -202,12 +283,21 @@ export default function HomePage() {
                 marginBottom: "20px",
               }}
             >
-              Hemat <span className="shimmer">Rp 500.000</span>
+              Pegang Niat Umroh <span className="shimmer">Hari Ini</span>
               <br />
-              untuk Perjalanan
-              <br />
-              Ibadahmu
+              <span
+                style={{
+                  fontSize: "clamp(22px,3vw,36px)",
+                  fontWeight: 400,
+                  fontStyle: "italic",
+                  color: "rgba(249,243,227,0.6)",
+                }}
+              >
+                Berangkat saat siap
+              </span>
             </h1>
+
+            {/* ── UPDATED SUBTEXT ── */}
             <p
               className="fade-up d3"
               style={{
@@ -218,9 +308,15 @@ export default function HomePage() {
                 maxWidth: "480px",
               }}
             >
-              Voucher diskon umroh yang berlaku di seluruh travel, tanpa batas
-              waktu, dan fleksibel sesuai jadwal keberangkatanmu.
+              Voucher Umroh Indonesia adalah voucher digital yang digunakan
+              sebagai potongan biaya saat klaim ke travel mitra.{" "}
+              <span style={{ color: "rgba(249,243,227,0.75)" }}>
+                Bukan paket umroh, bukan tabungan, dan tidak menjanjikan
+                keberangkatan.
+              </span>{" "}
+              Dapat berpindah tangan ke orang lain.
             </p>
+
             <div
               className="fade-up d4"
               style={{
@@ -236,7 +332,7 @@ export default function HomePage() {
                 rel="noopener noreferrer"
                 className="btn-gold"
               >
-                🛒 Beli Voucher — Rp 99.000
+                🛒 Beli Voucher — Rp 60.000
               </a>
               <a
                 href={WA_URL}
@@ -247,14 +343,17 @@ export default function HomePage() {
                 💬 Konsultasi via WhatsApp
               </a>
             </div>
+
+            {/* ── UPDATED CHECKMARKS (4 items) ── */}
             <div
               className="fade-up d5"
-              style={{ display: "flex", gap: "24px", flexWrap: "wrap" }}
+              style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}
             >
               {[
                 "Berlaku semua travel",
                 "Tidak ada expired",
                 "Jadwal fleksibel",
+                "Bebas dialihkan tanpa syarat",
               ].map((t) => (
                 <div
                   key={t}
@@ -454,7 +553,12 @@ export default function HomePage() {
                 UV•XXXX•XXXX
               </div>
               <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-                {["✓ Semua Travel", "✓ No Expired", "✓ Fleksibel"].map((t) => (
+                {[
+                  "✓ Semua Travel",
+                  "✓ No Expired",
+                  "✓ Fleksibel",
+                  "✓ Bisa Dialihkan",
+                ].map((t) => (
                   <span
                     key={t}
                     style={{
@@ -522,7 +626,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* ══ PROBLEM & SOLUTION ══ */}
+      {/* ══ PROBLEM & SOLUTION (REDESIGNED) ══ */}
       <section
         id="problem"
         style={{
@@ -532,143 +636,261 @@ export default function HomePage() {
         }}
       >
         <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+          {/* ── UPDATED TITLE & SUBTITLE ── */}
           <div style={{ textAlign: "center", marginBottom: "64px" }}>
-            <div className="label-tag">Mengapa Voucher Umroh?</div>
+            <div className="label-tag">Tantangan & Solusi</div>
             <h2
               className="serif"
-              style={{ fontSize: "clamp(28px,4vw,46px)", fontWeight: 700 }}
+              style={{
+                fontSize: "clamp(28px,4vw,46px)",
+                fontWeight: 700,
+                marginBottom: "16px",
+              }}
             >
-              Kami Hadir untuk Meringankan
-              <br />
-              <span className="shimmer">Beban Biaya Ibadahmu</span>
+              Kenapa Banyak Orang{" "}
+              <span className="shimmer">Menunda Umroh?</span>
             </h2>
+            <p
+              style={{
+                fontSize: "17px",
+                color: "var(--cream-dim)",
+                maxWidth: "520px",
+                margin: "0 auto",
+                lineHeight: 1.75,
+              }}
+            >
+              Bukan karena tidak ingin.
+              <br />
+              Tapi karena ada beberapa tantangan yang sering dihadapi.
+            </p>
           </div>
+
+          {/* ── 7 PROBLEM-SOLUTION CARDS ── */}
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "40px",
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "24px",
+              justifyContent: "center",
             }}
-            className="problem-grid"
           >
-            {[
-              {
-                title: "😔 Tantangan Umum",
-                color: "rgba(255,130,130,0.85)",
-                bg: "rgba(255,60,60,0.04)",
-                border: "rgba(255,100,100,0.1)",
-                items: [
-                  [
-                    "💸",
-                    "Biaya umroh yang terus meningkat membuat banyak keluarga menunda niat ibadah.",
-                  ],
-                  [
-                    "📅",
-                    "Diskon dari travel seringkali terbatas pada waktu tertentu dan tidak sesuai jadwal.",
-                  ],
-                  [
-                    "🗺️",
-                    "Promo hanya berlaku di satu travel, pilihan jamaah menjadi sangat terbatas.",
-                  ],
-                  [
-                    "⏳",
-                    "Voucher promo biasanya memiliki batas waktu pendek yang membuat stres.",
-                  ],
-                ],
-              },
-              {
-                title: "✨ Solusi Kami",
-                color: "rgba(34,197,94,0.9)",
-                bg: "rgba(34,197,94,0.04)",
-                border: "rgba(34,197,94,0.15)",
-                items: [
-                  [
-                    "💰",
-                    "Potongan langsung Rp 500.000 hanya dengan membeli voucher Rp 99.000 — investasi kecil, manfaat besar.",
-                  ],
-                  [
-                    "🕌",
-                    "Berlaku di seluruh travel umroh terdaftar di Indonesia — bebas pilih sesuai keinginan.",
-                  ],
-                  [
-                    "♾️",
-                    "Tidak ada batas waktu. Beli sekarang, gunakan kapanpun kamu siap berangkat.",
-                  ],
-                  [
-                    "👨‍👩‍👧‍👦",
-                    "Bisa dibeli untuk seluruh anggota keluarga dalam satu pembelian.",
-                  ],
-                ],
-              },
-            ].map((side) => (
+            {PROBLEMS.map((p) => (
               <div
-                key={side.title}
+                key={p.num}
                 style={{
-                  padding: "36px",
+                  flex: "0 0 300px",
+                  maxWidth: "300px",
                   borderRadius: "20px",
-                  background: side.bg,
-                  border: `1px solid ${side.border}`,
+                  background: "rgba(255,255,255,0.02)",
+                  border: "1px solid rgba(201,168,76,0.1)",
+                  overflow: "hidden",
+                  transition: "all 0.35s ease",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLDivElement;
+                  el.style.transform = "translateY(-4px)";
+                  el.style.borderColor = "rgba(201,168,76,0.25)";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLDivElement;
+                  el.style.transform = "";
+                  el.style.borderColor = "rgba(201,168,76,0.1)";
                 }}
               >
+                {/* Card Header */}
                 <div
-                  className="serif"
                   style={{
-                    fontSize: "22px",
-                    fontWeight: 600,
-                    color: side.color,
-                    marginBottom: "24px",
+                    padding: "20px 28px 16px",
+                    borderBottom: "1px solid rgba(201,168,76,0.08)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "14px",
                   }}
                 >
-                  {side.title}
-                </div>
-                {side.items.map(([icon, text]) => (
-                  <div
-                    key={text}
+                  <span
+                    className="serif"
                     style={{
-                      display: "flex",
-                      gap: "12px",
-                      marginBottom: "16px",
-                      fontSize: "15px",
-                      color: "var(--cream-dim)",
-                      lineHeight: 1.6,
+                      fontSize: "28px",
+                      fontWeight: 700,
+                      color: "rgba(201,168,76,0.2)",
+                      lineHeight: 1,
+                      flexShrink: 0,
                     }}
                   >
-                    <span style={{ flexShrink: 0 }}>{icon}</span>
-                    <span>{text}</span>
+                    {p.num}
+                  </span>
+                  <h3
+                    className="serif"
+                    style={{
+                      fontSize: "17px",
+                      fontWeight: 600,
+                      color: "#e8c96d",
+                      lineHeight: 1.3,
+                    }}
+                  >
+                    {p.title}
+                  </h3>
+                </div>
+
+                {/* Card Body */}
+                <div style={{ padding: "20px 28px 28px" }}>
+                  {/* Masalah */}
+                  <div style={{ marginBottom: "16px" }}>
+                    <div
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        fontSize: "10px",
+                        letterSpacing: "1.5px",
+                        color: "rgba(255,130,130,0.75)",
+                        marginBottom: "8px",
+                        fontWeight: 600,
+                      }}
+                    >
+                      <span
+                        style={{
+                          width: "8px",
+                          height: "8px",
+                          background: "rgba(255,100,100,0.4)",
+                          borderRadius: "50%",
+                          flexShrink: 0,
+                        }}
+                      />
+                      MASALAH
+                    </div>
+                    <p
+                      style={{
+                        fontSize: "14px",
+                        color: "rgba(249,243,227,0.5)",
+                        lineHeight: 1.65,
+                      }}
+                    >
+                      {p.masalah}
+                    </p>
                   </div>
-                ))}
+
+                  {/* Solusi */}
+                  <div>
+                    <div
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        fontSize: "10px",
+                        letterSpacing: "1.5px",
+                        color: "rgba(34,197,94,0.8)",
+                        marginBottom: "8px",
+                        fontWeight: 600,
+                      }}
+                    >
+                      <span
+                        style={{
+                          width: "8px",
+                          height: "8px",
+                          background: "rgba(34,197,94,0.35)",
+                          borderRadius: "50%",
+                          flexShrink: 0,
+                        }}
+                      />
+                      SOLUSI
+                    </div>
+                    <p
+                      style={{
+                        fontSize: "14px",
+                        color: "rgba(249,243,227,0.65)",
+                        lineHeight: 1.65,
+                      }}
+                    >
+                      {p.solusi}
+                    </p>
+                  </div>
+                </div>
               </div>
             ))}
+          </div>
+
+          {/* ── SECTION FOOTER ── */}
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "64px",
+              padding: "36px 40px",
+              borderRadius: "20px",
+              background: "rgba(201,168,76,0.04)",
+              border: "1px solid rgba(201,168,76,0.1)",
+              maxWidth: "640px",
+              margin: "64px auto 0",
+            }}
+          >
+            <p
+              className="serif"
+              style={{
+                fontSize: "18px",
+                color: "rgba(249,243,227,0.7)",
+                lineHeight: 1.8,
+                fontStyle: "italic",
+              }}
+            >
+              Voucher Umroh Indonesia bukan solusi untuk semua orang.
+              <br />
+              Tapi bagi Anda yang belum siap sekarang,
+              <br />
+              <span style={{ color: "#e8c96d" }}>
+                ini bisa menjadi langkah awal yang lebih tenang.
+              </span>
+            </p>
           </div>
         </div>
       </section>
 
-      {/* ══ KEUNGGULAN ══ */}
+      {/* ══ KEUNGGULAN (UPDATED: 7 cards + new subtitle + footer) ══ */}
       <section id="keunggulan" style={{ padding: "100px 6%" }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "64px" }}>
             <div className="label-tag">Keunggulan Kami</div>
+            {/* ── UPDATED TITLE ── */}
             <h2
               className="serif"
-              style={{ fontSize: "clamp(28px,4vw,46px)", fontWeight: 700 }}
+              style={{
+                fontSize: "clamp(28px,4vw,46px)",
+                fontWeight: 700,
+                marginBottom: "16px",
+              }}
             >
-              Tiga Alasan Mengapa
-              <br />
-              <span className="shimmer">Kami Berbeda</span>
+              Kenapa Voucher Umroh Indonesia{" "}
+              <span className="shimmer">Berbeda?</span>
             </h2>
+            {/* ── NEW SUBTITLE ── */}
+            <p
+              style={{
+                fontSize: "17px",
+                color: "var(--cream-dim)",
+                maxWidth: "520px",
+                margin: "0 auto",
+                lineHeight: 1.75,
+              }}
+            >
+              Kami tidak mencoba menjadi yang paling cepat.
+              <br />
+              Kami fokus menjadi yang paling jelas dan masuk akal.
+            </p>
           </div>
+
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3,1fr)",
+              display: "flex",
+              flexWrap: "wrap",
               gap: "24px",
+              justifyContent: "center",
             }}
-            className="benefits-grid"
           >
             {BENEFITS.map((b) => (
               <div
                 key={b.title}
                 style={{
+                  flex: "0 0 260px",
+                  maxWidth: "260px",
                   padding: "36px 28px",
                   borderRadius: "20px",
                   background: "rgba(255,255,255,0.025)",
@@ -726,6 +948,299 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+
+          {/* ── SECTION FOOTER ── */}
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "64px",
+              padding: "28px",
+              borderTop: "1px solid rgba(201,168,76,0.1)",
+            }}
+          >
+            <p
+              className="serif"
+              style={{
+                fontSize: "18px",
+                color: "rgba(249,243,227,0.55)",
+                fontStyle: "italic",
+                lineHeight: 1.8,
+              }}
+            >
+              Kami percaya, kepercayaan tidak dibangun dari janji besar,
+              <br />
+              <span style={{ color: "#e8c96d" }}>
+                tapi dari kejelasan dan konsistensi.
+              </span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ TRANSPARANSI (NEW SECTION) ══ */}
+      <section
+        id="transparansi"
+        style={{
+          padding: "100px 6%",
+          background: "rgba(5,18,10,0.7)",
+          position: "relative",
+        }}
+      >
+        <div
+          style={{ maxWidth: "760px", margin: "0 auto", textAlign: "center" }}
+        >
+          <div className="label-tag">Anti Penipuan</div>
+          <h2
+            className="serif"
+            style={{
+              fontSize: "clamp(28px,4vw,46px)",
+              fontWeight: 700,
+              marginBottom: "48px",
+            }}
+          >
+            <span className="shimmer">Transparansi Kami</span>
+          </h2>
+
+          <div
+            style={{
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid rgba(201,168,76,0.2)",
+              borderRadius: "24px",
+              padding: "48px 40px",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            {/* top accent line */}
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "3px",
+                background:
+                  "linear-gradient(90deg,transparent,rgba(201,168,76,0.5),transparent)",
+              }}
+            />
+
+            {/* Shield icon */}
+            <div
+              style={{
+                width: "72px",
+                height: "72px",
+                background: "rgba(34,197,94,0.08)",
+                border: "1px solid rgba(34,197,94,0.2)",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "32px",
+                margin: "0 auto 32px",
+              }}
+            >
+              🛡️
+            </div>
+
+            <div style={{ textAlign: "left" }}>
+              {[
+                "Voucher ini bukan paket umroh",
+                "Kami bukan travel penyelenggara umroh",
+                "Tidak ada janji keberangkatan",
+                "Tidak ada sistem investasi atau imbal hasil",
+                "Tidak ada dana berputar antar pengguna",
+              ].map((item) => (
+                <div
+                  key={item}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "16px",
+                    padding: "16px 0",
+                    borderBottom: "1px solid rgba(201,168,76,0.07)",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                      background: "rgba(34,197,94,0.12)",
+                      border: "1px solid rgba(34,197,94,0.3)",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "11px",
+                      color: "#22c55e",
+                      flexShrink: 0,
+                      marginTop: "1px",
+                    }}
+                  >
+                    ✓
+                  </div>
+                  <span
+                    style={{
+                      fontSize: "16px",
+                      color: "rgba(249,243,227,0.75)",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ SIMULASI NYATA (NEW SECTION) ══ */}
+      <section
+        id="simulasi"
+        style={{
+          padding: "100px 6%",
+          background: "rgba(7,26,15,0.5)",
+          position: "relative",
+        }}
+      >
+        <div
+          style={{ maxWidth: "680px", margin: "0 auto", textAlign: "center" }}
+        >
+          <div className="label-tag">Contoh Penggunaan</div>
+          <h2
+            className="serif"
+            style={{
+              fontSize: "clamp(28px,4vw,46px)",
+              fontWeight: 700,
+              marginBottom: "48px",
+            }}
+          >
+            Contoh Penggunaan <span className="shimmer">Voucher</span>
+          </h2>
+
+          <div
+            style={{
+              background:
+                "linear-gradient(145deg,rgba(13,61,30,0.8),rgba(7,26,15,0.9))",
+              border: "1px solid rgba(201,168,76,0.25)",
+              borderRadius: "24px",
+              padding: "44px 40px",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "3px",
+                background: "linear-gradient(90deg,#c9a84c,#e8c96d,#c9a84c)",
+              }}
+            />
+
+            {/* Simulation rows */}
+            {[
+              {
+                label: "Harga paket umroh",
+                value: "Rp 30.000.000",
+                color: "var(--cream)",
+                isTotal: false,
+              },
+              {
+                label: "Voucher Anda",
+                value: "– Rp 500.000",
+                color: "#22c55e",
+                isTotal: false,
+              },
+            ].map((row) => (
+              <div
+                key={row.label}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "16px 0",
+                  borderBottom: "1px solid rgba(201,168,76,0.08)",
+                }}
+              >
+                <span
+                  style={{ fontSize: "16px", color: "rgba(249,243,227,0.6)" }}
+                >
+                  {row.label}
+                </span>
+                <span
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: 600,
+                    color: row.color,
+                  }}
+                >
+                  {row.value}
+                </span>
+              </div>
+            ))}
+
+            {/* Total */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "20px 0 8px",
+              }}
+            >
+              <span
+                className="serif"
+                style={{ fontSize: "18px", fontWeight: 700, color: "#e8c96d" }}
+              >
+                Yang Dibayarkan
+              </span>
+              <span
+                className="shimmer serif"
+                style={{ fontSize: "28px", fontWeight: 700 }}
+              >
+                Rp 29.500.000
+              </span>
+            </div>
+
+            {/* Note */}
+            <div
+              style={{
+                marginTop: "24px",
+                padding: "16px 20px",
+                background: "rgba(201,168,76,0.06)",
+                border: "1px solid rgba(201,168,76,0.15)",
+                borderRadius: "12px",
+                textAlign: "left",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "13px",
+                  color: "rgba(249,243,227,0.5)",
+                  lineHeight: 1.65,
+                }}
+              >
+                <span style={{ color: "#c9a84c" }}>*Catatan:</span> Voucher
+                tidak mengurangi harga DP paket, tapi harga keseluruhan dari
+                paket yang dipilih.
+              </p>
+            </div>
+          </div>
+
+          <p
+            className="serif"
+            style={{
+              marginTop: "32px",
+              fontSize: "17px",
+              color: "rgba(249,243,227,0.5)",
+              fontStyle: "italic",
+            }}
+          >
+            Sederhana, transparan, dan mudah dipahami.
+          </p>
         </div>
       </section>
 
@@ -753,7 +1268,7 @@ export default function HomePage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(5,1fr)",
+              gridTemplateColumns: "repeat(4,1fr)",
               gap: "16px",
             }}
             className="steps-grid"
@@ -828,10 +1343,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══ HARGA ══ */}
+      {/* ══ HARGA (UPDATED: 60k + marketing gimmick + 7 features) ══ */}
       <section id="harga" style={{ padding: "100px 6%", textAlign: "center" }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
-          <div className="label-tag">Penawaran Terbaik</div>
+          <div className="label-tag">Penawaran Terbatas</div>
           <h2
             className="serif"
             style={{
@@ -844,6 +1359,7 @@ export default function HomePage() {
             <br />
             <span className="shimmer">Manfaat Berlipat</span>
           </h2>
+
           <div
             style={{
               maxWidth: "460px",
@@ -867,21 +1383,37 @@ export default function HomePage() {
                 background: "linear-gradient(90deg,#c9a84c,#e8c96d,#c9a84c)",
               }}
             />
+
+            {/* ── MARKETING GIMMICK BADGE ── */}
             <div
               style={{
                 display: "inline-block",
-                background: "rgba(34,197,94,0.12)",
-                border: "1px solid rgba(34,197,94,0.25)",
-                color: "#22c55e",
+                background: "rgba(255,100,100,0.12)",
+                border: "1px solid rgba(255,100,100,0.3)",
+                color: "#ff8080",
                 fontSize: "12px",
                 padding: "4px 14px",
                 borderRadius: "50px",
                 letterSpacing: "1px",
-                marginBottom: "28px",
+                marginBottom: "8px",
               }}
             >
-              ✦ PENAWARAN TERBATAS
+              🔥 PENAWARAN HARI INI
             </div>
+
+            {/* ── STRIKETHROUGH ORIGINAL PRICE ── */}
+            <div
+              style={{
+                fontSize: "18px",
+                color: "rgba(249,243,227,0.3)",
+                textDecoration: "line-through",
+                marginBottom: "4px",
+              }}
+            >
+              Rp 99.000
+            </div>
+
+            {/* ── NEW PRICE ── */}
             <div
               style={{
                 display: "flex",
@@ -905,7 +1437,7 @@ export default function HomePage() {
                 className="shimmer serif"
                 style={{ fontSize: "68px", fontWeight: 700, lineHeight: 1 }}
               >
-                99
+                60
               </span>
               <span
                 style={{
@@ -918,6 +1450,25 @@ export default function HomePage() {
                 .000
               </span>
             </div>
+
+            {/* ── SAVINGS CALLOUT ── */}
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                background: "rgba(34,197,94,0.1)",
+                border: "1px solid rgba(34,197,94,0.25)",
+                color: "#22c55e",
+                fontSize: "13px",
+                padding: "4px 14px",
+                borderRadius: "50px",
+                marginBottom: "8px",
+              }}
+            >
+              ✦ Hemat Rp 39.000 dari harga normal
+            </div>
+
             <p
               style={{
                 fontSize: "13px",
@@ -927,6 +1478,7 @@ export default function HomePage() {
             >
               harga per voucher · satu kali bayar
             </p>
+
             <div
               style={{
                 background: "rgba(201,168,76,0.06)",
@@ -953,14 +1505,10 @@ export default function HomePage() {
                 Rp 500.000
               </div>
             </div>
+
+            {/* ── 7 FEATURES ── */}
             <div style={{ textAlign: "left", marginBottom: "32px" }}>
-              {[
-                "Berlaku di seluruh travel umroh Indonesia",
-                "Tidak ada batas waktu penggunaan (no expired)",
-                "Kartu voucher digital eksklusif",
-                "Bisa untuk beberapa jemaah dalam satu pembelian",
-                "Support via WhatsApp langsung dari tim kami",
-              ].map((f) => (
+              {PRICE_FEATURES.map((f) => (
                 <div
                   key={f}
                   style={{
@@ -993,6 +1541,7 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
+
             <a
               href={BUY_URL}
               target="_blank"
@@ -1002,6 +1551,17 @@ export default function HomePage() {
             >
               🛒 Beli Voucher Sekarang
             </a>
+
+            {/* Urgency footnote */}
+            <p
+              style={{
+                marginTop: "14px",
+                fontSize: "12px",
+                color: "rgba(249,243,227,0.3)",
+              }}
+            >
+              * Harga spesial berlaku hari ini saja
+            </p>
           </div>
         </div>
       </section>
@@ -1279,7 +1839,7 @@ export default function HomePage() {
             className="btn-gold"
             style={{ fontSize: "17px", padding: "17px 42px" }}
           >
-            🛒 Beli Voucher — Rp 99.000
+            🛒 Beli Voucher — Rp 60.000
           </a>
           <a
             href={WA_URL}
