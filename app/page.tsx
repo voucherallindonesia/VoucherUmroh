@@ -463,7 +463,7 @@ export default function HomePage() {
                   }}
                 >
                   <img
-                    src="/VoucherUmroh/logo.png"
+                    src="/logo.png"
                     alt="Logo"
                     style={{
                       width: "22px",
@@ -1794,7 +1794,7 @@ export default function HomePage() {
           }}
         >
           <img
-            src="/VoucherUmroh/logo.png"
+            src="/logo.png"
             alt="Logo"
             style={{ width: "70px", height: "70px", objectFit: "contain" }}
           />

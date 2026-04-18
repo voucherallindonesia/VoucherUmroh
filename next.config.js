@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
   trailingSlash: true,
-  basePath: "/VoucherUmroh",
-  assetPrefix: "/VoucherUmroh",
   images: {
     unoptimized: true,
   },
