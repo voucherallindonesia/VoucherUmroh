@@ -56,7 +56,7 @@ export default function Navbar() {
         }}
       >
         <img
-          src="/VoucherUmroh/logo.png"
+          src="/logo.png"
           alt="Logo"
           style={{ width: "40px", height: "40px", objectFit: "contain" }}
         />
