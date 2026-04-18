@@ -1,3 +1,5 @@
+// VoucherUmroh/app/admin/dashboard
+
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -308,7 +310,7 @@ export default function AdminDashboardPage() {
       >
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <img
-            src="/VoucherUmroh/logo.png"
+            src="/logo.png"
             alt="Logo"
             style={{ width: "35px", height: "35px", objectFit: "contain" }}
           />
