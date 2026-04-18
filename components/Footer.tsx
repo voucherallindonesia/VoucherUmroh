@@ -64,6 +64,30 @@ export default function Footer() {
               Solusi hemat perjalanan ibadah umroh untuk seluruh umat muslim di
               Indonesia.
             </p>
+
+            {/* Admin Access */}
+            <a
+              href="/admin/login"
+              title="Admin Login"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "5px",
+                marginTop: "10px",
+                fontSize: "20px",
+                color: "rgba(249,243,227,0.25)",
+                textDecoration: "none",
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.color = "rgba(201,168,76,0.5)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.color = "rgba(249,243,227,0.25)")
+              }
+            >
+              🔒
+            </a>
           </div>
 
           {/* Navigasi */}

@@ -12,7 +12,7 @@ function getClient() {
 
 // ── AUTH ──────────────────────────────────────────────────────
 export function checkAdminPassword(input: string): boolean {
-  const pw = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin123";
+  const pw = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "Cencorang17";
   return input.trim() === pw.trim();
 }
 export function setAdminSession() {
