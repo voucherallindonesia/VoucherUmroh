@@ -1,9 +1,10 @@
 // VoucherUmroh/app/page.tsx
 "use client";
 import { useState } from "react";
+import styles from "./page.module.css";
 
 const WA_URL = `https://wa.me/${process.env.NEXT_PUBLIC_WA_NUMBER || "6285167060863"}`;
-const BUY_URL = process.env.NEXT_PUBLIC_PAYMENT_URL || "https://link.id";
+const BUY_URL = process.env.NEXT_PUBLIC_PAYMENT_URL || "https://lynk.id";
 
 const BENEFITS = [
   {
@@ -230,21 +231,8 @@ export default function HomePage() {
             pointerEvents: "none",
           }}
         />
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "60px",
-            alignItems: "center",
-            maxWidth: "1280px",
-            margin: "0 auto",
-            width: "100%",
-            position: "relative",
-            zIndex: 1,
-          }}
-          className="hero-grid"
-        >
-          <div>
+        <div className={styles.heroGrid}>
+          <div className={styles.heroContent}>
             <div
               className="fade-up d1"
               style={{
@@ -317,15 +305,7 @@ export default function HomePage() {
               Dapat berpindah tangan ke orang lain.
             </p>
 
-            <div
-              className="fade-up d4"
-              style={{
-                display: "flex",
-                gap: "14px",
-                flexWrap: "wrap",
-                marginBottom: "40px",
-              }}
-            >
+            <div className={`fade-up d4 ${styles.heroButtons}`}>
               <a
                 href={BUY_URL}
                 target="_blank"
@@ -345,10 +325,7 @@ export default function HomePage() {
             </div>
 
             {/* ── UPDATED CHECKMARKS (4 items) ── */}
-            <div
-              className="fade-up d5"
-              style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}
-            >
+            <div className={`fade-up d5 ${styles.heroChecks}`}>
               {[
                 "Berlaku semua travel",
                 "Tidak ada expired",
@@ -389,15 +366,9 @@ export default function HomePage() {
           </div>
 
           {/* Voucher Card */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              position: "relative",
-            }}
-          >
+          <div className={styles.heroCardContainer}>
             <div
+              className={styles.heroRing}
               style={{
                 position: "absolute",
                 width: "440px",
@@ -408,6 +379,7 @@ export default function HomePage() {
               }}
             />
             <div
+              className={styles.heroRing}
               style={{
                 position: "absolute",
                 width: "380px",
@@ -418,8 +390,8 @@ export default function HomePage() {
               }}
             />
             <div
+              className={styles.heroCard}
               style={{
-                width: "340px",
                 background: "linear-gradient(145deg,#0d4a24,#1a7a3e,#0b3b1c)",
                 border: "1px solid rgba(201,168,76,0.4)",
                 borderRadius: "24px",
@@ -550,7 +522,7 @@ export default function HomePage() {
                   marginBottom: "20px",
                 }}
               >
-                UV•XXXX•XXXX
+                ID•XXXX•XXXX
               </div>
               <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
                 {[
@@ -1583,14 +1555,7 @@ export default function HomePage() {
               <span className="shimmer">Jamaah Kami</span>
             </h2>
           </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3,1fr)",
-              gap: "20px",
-            }}
-            className="testi-grid"
-          >
+          <div className={`testi-grid ${styles.testiGrid}`}>
             {TESTIMONIALS.map((t) => (
               <div
                 key={t.name}

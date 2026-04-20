@@ -1,9 +1,6 @@
 // components/Footer.tsx
-
 "use client";
 import Link from "next/link";
-
-const WA = process.env.NEXT_PUBLIC_WA_NUMBER || "6285167060863";
 
 export default function Footer() {
   return (
@@ -16,31 +13,37 @@ export default function Footer() {
     >
       <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
         <div
+          className="footer-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "1.5fr 1fr 1fr 1fr",
             gap: "48px",
             marginBottom: "48px",
           }}
-          className="footer-grid"
         >
           {/* Brand */}
-          <div>
+          <div className="footer-brand">
             <Link
               href="/"
               style={{
                 display: "flex",
-                alignItems: "center",
+                flexDirection: "row",
+                alignItems: "flex-start",
                 gap: "10px",
                 textDecoration: "none",
               }}
+              className="footer-brand-link"
             >
               <img
                 src="/logo.png"
                 alt="Logo"
-                style={{ width: "40px", height: "40px", objectFit: "contain" }}
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  objectFit: "contain",
+                  display: "block",
+                }}
               />
-
               <span
                 style={{
                   fontFamily: "'Playfair Display',serif",
@@ -73,9 +76,9 @@ export default function Footer() {
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "5px",
-                marginTop: "10px",
-                fontSize: "20px",
-                color: "rgba(249,243,227,0.25)",
+                marginTop: "16px",
+                fontSize: "11px",
+                color: "rgba(249,243,227,0.15)",
                 textDecoration: "none",
                 transition: "color 0.2s",
               }}
@@ -83,7 +86,7 @@ export default function Footer() {
                 (e.currentTarget.style.color = "rgba(201,168,76,0.5)")
               }
               onMouseLeave={(e) =>
-                (e.currentTarget.style.color = "rgba(249,243,227,0.25)")
+                (e.currentTarget.style.color = "rgba(249,243,227,0.15)")
               }
             >
               🔒
@@ -229,6 +232,7 @@ export default function Footer() {
           }}
         />
         <div
+          className="footer-bottom"
           style={{
             display: "flex",
             justifyContent: "space-between",

@@ -1,0 +1,147 @@
+/* ═══════════════════════════════════════════════
+   page.module.css
+   Khusus layout responsive untuk app/page.tsx
+   Hanya menangani layout — warna & animasi
+   tetap di inline style JSX
+═══════════════════════════════════════════════ */
+
+/* ── HERO GRID ── */
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── HERO CONTENT (kolom kiri) ── */
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* ── HERO BUTTONS ── */
+.heroButtons {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+/* ── HERO CHECKMARKS ── */
+.heroChecks {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* ── HERO CARD CONTAINER (kolom kanan) ── */
+.heroCardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* ── ROTATING RING ORNAMENTS ── */
+.heroRing {
+  /* visible di desktop */
+}
+
+/* ── VOUCHER CARD ── */
+.heroCard {
+  width: 340px;
+}
+
+/* ═══════════════════════════════════════════════
+   TABLET (≤ 900px)
+═══════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .heroGrid {
+    gap: 36px;
+  }
+
+  .heroCard {
+    width: 300px;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   MOBILE (≤ 768px)
+═══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Grid → 1 kolom, kartu di bawah teks */
+  .heroGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  /* Konten kiri → center */
+  .heroContent {
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
+
+  /* Tombol → stack vertikal, full width */
+  .heroButtons {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 32px;
+  }
+
+  /* Semua btn di dalam heroButtons → full width */
+  .heroButtons > a {
+    width: 100%;
+    max-width: 360px;
+    justify-content: center;
+  }
+
+  /* Checkmarks → center */
+  .heroChecks {
+    justify-content: center;
+  }
+
+  /* Sembunyikan ornamen rotating ring */
+  .heroRing {
+    display: none;
+  }
+
+  /* Kartu → full width tapi tetap ada max-width */
+  .heroCardContainer {
+    width: 100%;
+  }
+
+  .heroCard {
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   MOBILE KECIL (≤ 480px)
+═══════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .heroCard {
+    max-width: 280px;
+  }
+}
+
+/* ── TESTIMONI GRID ── */
+.testiGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .testiGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,3 +1,5 @@
+/* app/globals.css */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -387,5 +389,205 @@ body {
 
   .footer-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE — MOBILE & TABLET
+   Menggantikan seluruh blok responsive sebelumnya
+═══════════════════════════════════════════════════════════ */
+
+/* ── Base grid definitions (desktop) ── */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+}
+
+/* ── TABLET (≤ 900px) ── */
+@media (max-width: 900px) {
+  .steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .testi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ══════════════════════════════════════
+   MOBILE (≤ 768px) — perubahan utama
+══════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ── Section spacing ── */
+  section {
+    padding-left: 5% !important;
+    padding-right: 5% !important;
+  }
+
+  /* ── Universal text center untuk semua section ── */
+  section .label-tag,
+  section h1,
+  section h2,
+  section h3,
+  section p {
+    text-align: center;
+  }
+
+  /* ── Hero ── */
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  /* Sembunyikan ornamen rotating ring di mobile */
+  .hero-grid > div:last-child > div[style*="rotateSlow"] {
+    display: none;
+  }
+
+  /* Checkmarks hero — center */
+  .hero-grid > div:first-child > div[style*="flexWrap"] {
+    justify-content: center;
+  }
+
+  /* Tombol hero — full width stack */
+  .hero-grid .btn-gold,
+  .hero-grid .btn-outline {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ── Steps ── */
+  .steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  /* ── Testimoni ── */
+  .testi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* ── Footer ── */
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    text-align: center;
+  }
+
+  /* Brand stacked center */
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-brand p {
+    max-width: 100% !important;
+    text-align: center;
+  }
+
+  /* Footer brand link — logo + teks vertikal center, hanya mobile */
+  .footer-brand-link {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  /* Footer nav links center */
+  .footer-grid > div > a,
+  .footer-grid > div > div > a {
+    text-align: center;
+  }
+
+  /* Footer social icons center */
+  .footer-grid > div > div[style*="display: flex"] {
+    justify-content: center;
+  }
+
+  /* Footer bottom bar */
+  .footer-bottom {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* ── CTA buttons full width di mobile ── */
+  section .btn-gold,
+  section .btn-outline {
+    width: 100%;
+    max-width: 360px;
+    justify-content: center;
+  }
+
+  /* Container flex tombol → center + stack */
+  section > div > div[style*="display: flex"][style*="gap: 16px"],
+  section > div > div[style*="display: flex"][style*="gap: 14px"] {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* ── MOBILE KECIL (≤ 480px) ── */
+@media (max-width: 480px) {
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Kartu voucher hero — lebih kecil */
+  .hero-grid > div:last-child > div[style*="width: 340px"] {
+    width: 100% !important;
+    max-width: 300px;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   NAVBAR RESPONSIVE
+   CSS yang menentukan show/hide elemen navbar.
+   JavaScript hanya untuk toggle open/close menu —
+   bukan untuk menentukan elemen yang ditampilkan.
+═══════════════════════════════════════════════ */
+
+/* Desktop: tampilkan nav links, sembunyikan hamburger & mobile menu */
+.nav-desktop {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-hamburger {
+  display: none;
+}
+
+.nav-mobile-menu {
+  display: none;
+}
+
+/* Mobile (≤ 768px): sembunyikan nav links, tampilkan hamburger & mobile menu */
+@media (max-width: 768px) {
+  .nav-desktop {
+    display: none;
+  }
+
+  .nav-hamburger {
+    display: flex;
+  }
+
+  .nav-mobile-menu {
+    display: block;
   }
 }
